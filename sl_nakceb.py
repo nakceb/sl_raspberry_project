@@ -1,25 +1,30 @@
 #!/usr/bin/python
 
-#trafiklab.se
+#https://www.trafiklab.se/api
 #filip.stenbeck@hotmail.com
 import urllib2
 import json
-
-
-#http://api.sl.se/api2/deviations.<FORMAT>?key=<DIN API NYCKEL>&transportMode=<TRANSPORTMODE>&lineNumber=<LINENUMBER>&siteId=<SITEID>&fromDate=<FROMDATE>&toDate=<TODATE>
+from sl_lib import *
 
 #keys
-jam_key='82749b49e54246789070473b6f3f9b55'
-tabular_key='a811280c-e0ff-4860-b8d5-51d5c701c660'
+search_string = 'uppsala centralstation'
 
-#urls
-jam_url='http://api.sl.se/api2/deviations.json?key=82749b49e54246789070473b6f3f9b55&transportMode=tram&lineNumber=38'
+#Id's
+Uppsala = get_place_id('Uppsalacentralstation')
+Stockholm = get_place_id('StockholmsCentralstation')
 
-jam_obj = urllib2.urlopen(jam_url)
+jam_error = is_jam('tram','38')
+print( jam_error )
+if not jam_error:
+    trip_list = next_trips( Uppsala, Stockholm )
+    for item in trip_list:
+        print item.o_t
+else:
+    print( jam_error )
 
-jam_data = json.load(jam_obj)
 
-for item in jam_data['ResponseData']:
-    print(item['ScopeElements'])
-    print(item['Details'])
+
+
+
+
 
